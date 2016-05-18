@@ -1,0 +1,2 @@
+# HibernateRepository
+Hibernate repository implementation.
