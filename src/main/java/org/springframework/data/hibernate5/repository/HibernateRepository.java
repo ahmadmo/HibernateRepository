@@ -1,12 +1,12 @@
-package org.springframework.orm.hibernate5.repository;
+package org.springframework.data.hibernate5.repository;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.springframework.data.repository.IRepository;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
-import org.springframework.orm.repository.IRepository;
-import org.springframework.orm.repository.ISpecification;
+import org.springframework.data.repository.ISpecification;
 
 import java.io.Serializable;
 import java.util.List;

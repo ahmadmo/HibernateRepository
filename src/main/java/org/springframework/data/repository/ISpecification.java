@@ -1,4 +1,4 @@
-package org.springframework.orm.repository;
+package org.springframework.data.repository;
 
 /**
  * @author ahmad

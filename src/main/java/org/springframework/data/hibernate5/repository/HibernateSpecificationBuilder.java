@@ -1,4 +1,4 @@
-package org.springframework.orm.hibernate5.repository;
+package org.springframework.data.hibernate5.repository;
 
 import java.util.function.Consumer;
 

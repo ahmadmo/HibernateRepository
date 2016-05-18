@@ -1,8 +1,8 @@
-package org.springframework.orm.hibernate5.repository;
+package org.springframework.data.hibernate5.repository;
 
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
-import org.springframework.orm.repository.ISpecification;
+import org.springframework.data.repository.ISpecification;
 
 import java.util.Iterator;
 import java.util.List;

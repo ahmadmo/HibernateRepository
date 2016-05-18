@@ -1,6 +1,6 @@
-package org.springframework.orm.hibernate5.repository;
+package org.springframework.data.hibernate5.repository;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.Criteria;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 
@@ -11,13 +11,13 @@ import java.util.function.Consumer;
 /**
  * @author ahmad
  */
-final class SQLQuerySpecification<Entity> implements IHibernateSpecification<Entity> {
+final class CriteriaSpecification<Entity> implements IHibernateSpecification<Entity> {
 
-    private final SQLQuery sqlQuery;
+    private final Criteria criteria;
     private final Class<Entity> entityClass;
 
-    private SQLQuerySpecification(SQLQuery sqlQuery, Class<Entity> entityClass) {
-        this.sqlQuery = sqlQuery;
+    private CriteriaSpecification(Criteria criteria, Class<Entity> entityClass) {
+        this.criteria = criteria;
         this.entityClass = entityClass;
     }
 
@@ -28,12 +28,12 @@ final class SQLQuerySpecification<Entity> implements IHibernateSpecification<Ent
 
     @Override
     public <R> R get(Class<R> returnType) {
-        return returnType.cast(sqlQuery.uniqueResult());
+        return returnType.cast(criteria.uniqueResult());
     }
 
     @Override
     public boolean exists() {
-        return sqlQuery.uniqueResult() != null;
+        return criteria.uniqueResult() != null;
     }
 
     @Override
@@ -53,57 +53,57 @@ final class SQLQuerySpecification<Entity> implements IHibernateSpecification<Ent
 
     @Override
     public <R> R findOne(Class<R> returnType) {
-        List list = sqlQuery.setMaxResults(1).list();
+        List list = criteria.setMaxResults(1).list();
         return list.isEmpty() ? null : returnType.cast(list.get(0));
     }
 
     @Override
     public int executeUpdate() {
-        return sqlQuery.executeUpdate();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Entity> list() {
-        return sqlQuery.list();
+        return criteria.list();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <R> List<R> list(Class<R> returnType) {
-        return sqlQuery.list();
+        return criteria.list();
     }
 
     @Override
     public Iterator iterate() {
-        return sqlQuery.iterate();
+        return criteria.list().iterator();
     }
 
     @Override
     public ScrollableResults scroll() {
-        return sqlQuery.scroll();
+        return criteria.scroll();
     }
 
     @Override
     public ScrollableResults scroll(ScrollMode scrollMode) {
-        return sqlQuery.scroll(scrollMode);
+        return criteria.scroll(scrollMode);
     }
 
-    static final class Builder<E> extends HibernateSpecificationBuilder<E, SQLQuery> {
+    static final class Builder<E> extends HibernateSpecificationBuilder<E, Criteria> {
 
-        Builder(SQLQuery sqlQuery, Class<E> entityClass) {
-            super(sqlQuery, entityClass);
+        Builder(Criteria criteria, Class<E> entityClass) {
+            super(criteria, entityClass);
         }
 
         @Override
-        public SQLQuerySpecification<E> use(Consumer<SQLQuery> action) {
-            action.accept(new SQLQueryProxy(delegate));
+        public CriteriaSpecification<E> use(Consumer<Criteria> action) {
+            action.accept(new CriteriaProxy(delegate));
             return end();
         }
 
         @Override
-        public SQLQuerySpecification<E> end() {
-            return new SQLQuerySpecification<>(delegate, entityClass);
+        public CriteriaSpecification<E> end() {
+            return new CriteriaSpecification<>(delegate, entityClass);
         }
 
     }
