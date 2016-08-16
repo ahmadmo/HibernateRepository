@@ -6,6 +6,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -35,6 +36,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public User findByEmail(final String email) {
         return userRepository.namedQuery(User.FIND_BY_EMAIL)
                 .use(q -> q.setString("email", email))

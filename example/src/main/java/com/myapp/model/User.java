@@ -1,8 +1,5 @@
 package com.myapp.model;
 
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.OptimisticLocking;
-
 import javax.persistence.*;
 
 /**
@@ -10,8 +7,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table
-@DynamicUpdate
-@OptimisticLocking
 @NamedQueries({
         @NamedQuery(name = User.FIND_BY_EMAIL, query = "select u from User u where u.email = (:email)"),
 })
