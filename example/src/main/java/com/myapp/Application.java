@@ -1,6 +1,7 @@
 package com.myapp;
 
 import com.myapp.model.User;
+import com.myapp.service.DuplicateEmailAddressException;
 import com.myapp.service.InvalidDataEntryException;
 import com.myapp.service.UserService;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +19,7 @@ public class Application {
         try {
             User newUser = userService.register("ahmad.mozafarnia@gmail.com", "ahmad123456");
             System.out.println("registration successful. User[" + newUser.getId() + "]");
-        } catch (InvalidDataEntryException e) {
+        } catch (InvalidDataEntryException | DuplicateEmailAddressException e) {
             System.err.println("registration failed. due to: " + e.getMessage());
         }
 
