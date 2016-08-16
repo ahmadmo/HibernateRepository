@@ -3,8 +3,8 @@ package com.myapp.service;
 import com.myapp.model.User;
 import com.myapp.repository.UserRepository;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,17 +23,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(rollbackFor = DuplicateEmailAddressException.class)
     public User register(String email, String password) throws InvalidDataEntryException, DuplicateEmailAddressException {
         if (!EmailValidator.getInstance().isValid(email)) {
             throw new InvalidDataEntryException("invalid email address = " + email);
         }
         User user = new User(email, password);
+        userRepository.add(user);
         try {
-            userRepository.add(user);
-        } catch (ConstraintViolationException e) {
+            userRepository.getHibernateTemplate().flush();
+            return user;
+        } catch (DataIntegrityViolationException e) {
             throw new DuplicateEmailAddressException(email);
         }
-        return user;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

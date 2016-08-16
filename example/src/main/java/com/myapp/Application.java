@@ -6,6 +6,7 @@ import com.myapp.service.InvalidDataEntryException;
 import com.myapp.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * @author ahmad
@@ -20,7 +21,7 @@ public class Application {
             User newUser = userService.register("ahmad.mozafarnia@gmail.com", "ahmad123456");
             System.out.println("registration successful. User[" + newUser.getId() + "]");
         } catch (InvalidDataEntryException | DuplicateEmailAddressException e) {
-            System.err.println("registration failed. due to: " + e.getMessage());
+            System.out.println("registration failed. due to: " + e);
         }
 
         User result = userService.findByEmail("ahmad.mozafarnia@gmail.com");
